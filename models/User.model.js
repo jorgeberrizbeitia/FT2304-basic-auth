@@ -7,7 +7,7 @@ const userSchema = new Schema(
       type: String,
       trim: true, // remover los espacios vacios antes o despues del string "  bob " => "bob"
       required: false,
-      unique: true
+      unique: false
     },
     email: {
       type: String,

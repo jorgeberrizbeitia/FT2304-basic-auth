@@ -10,16 +10,22 @@
     <br>
 
     <label for="email">Correo Electronico</label>
-    <input type="text" name="email">
+    {{!-- <input type="email" name="email" required="true"> --}}
+    <input type="email" name="email">
 
     <br>
 
     <label for="password">Contraseña</label>
-    <input type="text" name="password">
+    {{!-- <input type="password" name="password" required="true"> --}}
+    <input type="password" name="password">
 
     <br>
 
     <button>Registrar</button>
+
+    {{#if this.errorMessage}}
+      <p style="color: red">{{this.errorMessage}}</p>
+    {{/if}}
 
   </form>
 
