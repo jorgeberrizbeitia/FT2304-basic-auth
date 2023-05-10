@@ -118,13 +118,33 @@ router.post("/login", async (req, res, next) => {
     // a a partir de este punto ya hemos autenticado al usuario
     // 1. crear una sesion activa del usuario
     // 2. constantemente verificar en las rutas privadas que el usuario tenga dicha sesion activa
-  
-    // TEST (para probar que todo va bien con la ruta)
-    res.redirect("/profile")
+    // todo crea la sesión
+
+    req.session.user = foundUser; // se crea la sesión
+    // A partir de este momento tendremos acceso a req.session.user para saber quien está haciendo las llamadas al servidor
+
+    req.session.save(() => {
+      // Despues de que la sesión se crea correctamente, entonces redirije a una pagina privada
+      res.redirect("/profile")
+    })
+
     
   } catch (error) {
     next(error)
   }
+})
+
+// GET "/auth/logout" => Cerrar (Destruir) la sesión activa
+router.get("/logout", (req, res, next) => {
+
+  // esta linea borra la sesión activa del usuario
+  req.session.destroy(() => {
+
+    // que ocurre luego de borrar la sesión
+    res.redirect("/")
+
+  })
+
 })
 
 module.exports = router;
