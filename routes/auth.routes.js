@@ -74,9 +74,57 @@ router.post("/signup", async (req, res, next) => {
 
 
 // GET "/auth/login" => Renderizar el formulario de acceso a la pagina
-
+router.get("/login", (req, res, next) => {
+  res.render("auth/login.hbs")
+})
 
 // POST "/auth/login" => Recibir las credenciales del usuario y validar su identidad (autenticación)
+router.post("/login", async (req, res, next) => {
+  console.log(req.body)
 
+  // OPCIONALMENTE podemos hacer destructuración del req.body
+
+  // validacion que todos los campos esten llenos
+  if (req.body.email === "" || req.body.password === "") {
+    res.render("auth/login.hbs", {
+      errorMessage: "Los campos de email y contraseña son obligatorios",
+    })
+    return // cuando esto ocurra, deten la ejecución de la ruta (funcion) 
+  }
+
+  try {
+    // validar que el usuario existe en la base de datos
+    const foundUser = await User.findOne({email: req.body.email})
+    if (foundUser === null) {
+      res.render("auth/login.hbs", {
+        errorMessage: "Usuario no registrado con ese correo",
+      })
+      return // cuando esto ocurra, deten la ejecución de la ruta (funcion) 
+    }
+    console.log(foundUser)
+    
+  
+    // validar que la contraseña sea la correcta
+    const isPasswordCorrect = await bcrypt.compare(req.body.password, foundUser.password)
+    console.log(isPasswordCorrect)
+    if (isPasswordCorrect === false) {
+      res.render("auth/login.hbs", {
+        errorMessage: "Contraseña no valida",
+        // email: req.body.email // ejemplo de pasar los datos que ya habia escrito el usuario
+      })
+      return // cuando esto ocurra, deten la ejecución de la ruta (funcion) 
+    }
+
+    // a a partir de este punto ya hemos autenticado al usuario
+    // 1. crear una sesion activa del usuario
+    // 2. constantemente verificar en las rutas privadas que el usuario tenga dicha sesion activa
+  
+    // TEST (para probar que todo va bien con la ruta)
+    res.redirect("/profile")
+    
+  } catch (error) {
+    next(error)
+  }
+})
 
 module.exports = router;
