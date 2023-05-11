@@ -16,5 +16,9 @@ router.get("/admin", isLoggedIn, isAdmin, (req, res, next) => {
   res.render("profile/admin-dashboard.hbs")
 })
 
+router.get("/patata", isLoggedIn, (req, res, next) => {
+  // ruta de prueba para ramas
+})
+
 
 module.exports = router;
