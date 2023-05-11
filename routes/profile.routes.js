@@ -18,6 +18,9 @@ router.get("/admin", isLoggedIn, isAdmin, (req, res, next) => {
 
 router.get("/patata", isLoggedIn, (req, res, next) => {
   // ruta de prueba para ramas
+
+  console.log(res.locals)
+  console.log("patata sin guardar")
 })
 
 
